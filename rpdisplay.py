@@ -87,9 +87,9 @@ def get_current_game_info():
                     
                     return system_name, game_name
         
-        return "LainStation", "Menu"
+        return "RetroPie", "Menu"
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-        return "LainStation", "Menu"
+        return "RetroPie", "Menu"
 
 # Display game information on screen (page 1)
 def display_on_oled(system_text, game_text, stop_event, scroll_speed=0.03):
