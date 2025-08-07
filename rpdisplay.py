@@ -44,8 +44,8 @@ serial = spi(device=0, port=0)
 device = sh1106(serial, rotate=2)
 
 # GPIO Section
-JOYSTICK_RIGHT_PIN = 26 # Right Joystick
-JOYSTICK_LEFT_PIN = 5 # Left Joystick
+JOYSTICK_RIGHT_PIN = 26 # Right Joystick (next page)
+JOYSTICK_LEFT_PIN = 5 # Left Joystick (previous page)
 BUTTON1_PIN = 21  # Toggle Brightness (low, medium, high, off)
 BUTTON2_PIN = 20  # Safe Reboot (hold for 3s)
 BUTTON3_PIN = 16  # Safe Shutdown (hold for 3s)
@@ -54,6 +54,10 @@ BUTTON3_PIN = 16  # Safe Shutdown (hold for 3s)
 BRIGHTNESS_LEVELS = [30, 128, 255, 0] # Low, Medium, High, Off
 brightness_index = 0  # Start at 30 (low)
 device.contrast(BRIGHTNESS_LEVELS[brightness_index])
+
+# Automatic page switch
+PAGE_TURN = True
+PAGE_INTERVAL = 10
 
 # Load  default font
 font = ImageFont.load_default()
@@ -264,7 +268,8 @@ def main():
     last_game = ""
     scroll_thread = None
     stop_event = threading.Event()
-    current_page = 0  # 0 = game, 1 = media, 2 = system, 3 = network
+    current_page = 0  # 0 = game, 1 = media, 2 = system
+    last_page_change = time.time()
 
     def update_display():
         nonlocal scroll_thread, stop_event, last_system, last_game
@@ -297,15 +302,17 @@ def main():
 
         scroll_thread.start()
 
-    def next_page(channel):
-        nonlocal current_page
+    def next_page(channel=None):
+        nonlocal current_page, last_page_change
         current_page = (current_page + 1) % 3
+        last_page_change = time.time()
         update_display()
 
     # Set up GPIO
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(JOYSTICK_RIGHT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(JOYSTICK_RIGHT_PIN, GPIO.FALLING, callback=next_page, bouncetime=300)
+
     GPIO.setup(BUTTON1_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(BUTTON2_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(BUTTON3_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -317,11 +324,17 @@ def main():
     try:
         update_display()
         while True:
+            now = time.time()
+
+            if PAGE_TURN and (now - last_page_change >= PAGE_INTERVAL):
+                next_page()
+
             if current_page == 0:
                 current_system_raw, current_game = get_current_game_info()
                 display_system_name = SYSTEM_NAMES.get(current_system_raw, current_system_raw.capitalize())
                 if display_system_name != last_system or current_game != last_game:
                     update_display()
+
             time.sleep(1)
     except KeyboardInterrupt:
         GPIO.cleanup()
