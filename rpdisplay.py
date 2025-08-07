@@ -63,6 +63,10 @@ PAGE_INTERVAL = 10
 font = ImageFont.load_default()
 font_large = ImageFont.load_default()
 
+# Uncomment this and comment out the two lines above to use a custom font! This assumes your font (ie; "Arial.ttf") is in the same folder
+#font = ImageFont.truetype("Arial.ttf", size=8)        # Regular size
+#font_large = ImageFont.truetype("Arial.ttf", size=12)  # Larger size
+
 # Read current game and system information from psutil
 def get_current_game_info():
     try:
