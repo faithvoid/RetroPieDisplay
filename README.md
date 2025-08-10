@@ -22,7 +22,7 @@ SH1106-based game/media/system statistic display for RetroPie (includes safe reb
 
 ## TODO:
 - Fetch game name from gamelist.xml when available instead of defaulting to the filename
-- Modify "Now Listening" section to show video information if detected via MPRIS
+- Modify "Now Listening" section to show cover art and video information if detected via MPRIS
 - Add option to only automatically switch between Game Info and Synopsis views
 - Align icons + text to the center
 - Stop text from drawing over border
