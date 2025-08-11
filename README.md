@@ -1,5 +1,9 @@
 # sakuraDisplay
 SH1106-based game/media/system statistic display for RetroPie (includes safe reboot/shutdown!)
+![](screenshots/1.jpg)
+![](screenshots/2.jpg)
+![](screenshots/3.jpg)
+![](screenshots/3.jpg)
 
 ## Features
 - "Now Playing" menu (currently running system name + icon, currently running game)
