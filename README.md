@@ -39,3 +39,6 @@ SH1106-based game/media/system statistic display for RetroPie (includes safe reb
 
 ## Why?
 I've been working on a personal Raspberry Pi 3 A+ consolization project for my CRT TV using RetroPie with the Playstation theme as a frontend, and as a big fan of oldschool modchips with LCD displays, I love the concept of integrating a similar concept into my retro game setup. It's also practical, as you can view other information such as currently playing music, network settings and signal strength, and it's fairly modular, meaning additional information can always be added!
+
+## Credits
+sgigou - NF-Pixels font
